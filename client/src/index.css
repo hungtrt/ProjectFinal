@@ -1,0 +1,27 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "./styles/buttons.css";
+@import "./styles/form.css";
+@import "./styles/styles.css";
+@import "./styles/nav.css";
+@import "./styles/header.css";
+@import "./styles/table.css";
+@import "tailwindcss/utilities";
+
+@import "./styles/loginAdmin.css";
+@import "./styles/landing.css";
+@import "./styles/contact.css";
+@import "./styles/contactHome.css";
+@import "./styles/mainPanel.css";
+@import "./styles/news.css";
+
+
+@import "./styles/static/Card.css";
+@import "./styles/static/Cards.css";
+@import "./styles/static/MainDash.css";
+@import "./styles/static/RightSide.css";
+@import "./styles/static/Sidebar.css";
+@import "./styles/static/Table.css";
+@import "./styles/static/Update.css";
+
+

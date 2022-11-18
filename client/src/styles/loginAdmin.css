@@ -1,0 +1,48 @@
+.login-box {
+    background: url(https://i.imgur.com/73BxBuI.png);
+    background-size: cover;
+    background-position: center;
+    padding: 50px;
+    margin: 30px 100px;
+    height: 37rem !important;
+    -webkit-box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 60px -5px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+}
+.logo {
+    /* font-family: "Script MT"; */
+    font-size: 32px !important;
+    text-align: center;
+    color: #888888;
+    margin-bottom: 50px;
+    margin-left: -570px !important; 
+}
+
+.logo .logo-font {
+    color: #3BC3FF;
+}
+.slider-feature-card {
+    background: #fff;
+    max-width: 280px;
+    margin: 0 auto;
+    padding: 30px;
+    text-align: center;
+    margin-left: 720px;
+    -webkit-box-shadow: 0 2px 25px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+.slider-feature-card img {
+    height: 120px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.slider-feature-card h3,
+.slider-feature-card p {
+    margin-bottom: 15px;
+}
+
+.form-login {
+    width: 360px !important;
+}
