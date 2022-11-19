@@ -8,7 +8,7 @@ export const homeData = [
       starring: "",
       genres: "",
       tags: "",
-      cover: "https://apianoyes.vn/wp-content/uploads/2022/01/slide-tet-2022.png",
+      cover: "https://pianohcm.com/wp-content/uploads/2020/03/Banner-Pianoht-2020-scaled.jpg",
       date: "",
     },
     {
@@ -20,7 +20,7 @@ export const homeData = [
       starring: "",
       genres: "",
       tags: "",
-      cover: "https://pianohcm.com/wp-content/uploads/2020/03/Banner-Pianoht-2020-scaled.jpg",
+      cover: "https://apianoyes.vn/wp-content/uploads/2022/01/slide-tet-2022.png",
       date: "",
     },
     {
