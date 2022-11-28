@@ -26,7 +26,7 @@ class Product {
         if (parseInt(parsedData.stock) < 1) {
           errors.push({ msg: "Số lượng không hợp lệ!" });
         }
-        if (fields.description.trim().length === 0) {
+        if (parsedData.description.trim().length === 0) {
           errors.push({ msg: "Mô tả không được để trống!" });
         }
         if (errors.length === 0) {
@@ -78,7 +78,7 @@ class Product {
                   image1: images["image1"],
                   image2: images["image2"],
                   image3: images["image3"],
-                  description: fields.description,
+                  description: parsedData.description,
                 });
                 return res.status(201).json({ msg: "Sản phẩm được tạo thành công!", response });
               } catch (error) {

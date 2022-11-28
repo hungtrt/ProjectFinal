@@ -40,12 +40,13 @@ const CreateProduct = () => {
     { name: "4 years" },
     { name: "5 years" },
   ]);
-
+  //luu image vao 2 state(preview va state) vi 1 ben can dang du lieu render , 1 ben luu vao database
   const [preview, setPreview] = useState({
     image1: "",
     image2: "",
     image3: "",
   });
+
   const imageHandle = (e) => {
     if (e.target.files.length !== 0) {
       const reader = new FileReader();
@@ -97,18 +98,16 @@ const CreateProduct = () => {
         };
       })
     );
-
     //setTypeFormSize
     form.setFieldValue("sizes", state.sizes);
-    console.log(form.getFieldsValue({...form}));
 
     const data = form.getFieldsValue({ ...form });
-
+    
     formData.append("data", JSON.stringify(data));
-    formData.append("description", value);
     formData.append("image1", state.image1);
     formData.append("image2", state.image2);
     formData.append("image3", state.image3);
+    
     createNewProduct(formData);
   };
   useEffect(() => {
@@ -138,7 +137,7 @@ const CreateProduct = () => {
         <Col>
           <Form
             form={form}
-            className="createProduct"
+            // className="createProduct"
             layout="vertical"
             onFinish={(e) => {
               createProduct(e);
@@ -309,18 +308,17 @@ const CreateProduct = () => {
               />
             </Form.Item>
 
-            <div className="w-full p-3">
-              <label htmlFor="description" className="label">
-                Mô tả
-              </label>
+            <Form.Item
+                name="description"
+                label={<label className="label">Mô tả</label>}
+            >
               <ReactQuill
+                name="description"
                 theme="snow"
                 id="description"
-                value={value}
-                onChange={setValue}
                 placeholder="Thêm mô tả..."
               />
-            </div>
+            </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Input

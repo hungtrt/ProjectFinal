@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { TwitterPicker } from "react-color";
-import { v4 as uuidv4 } from "uuid";
 import ReactQuill from "react-quill";
 import toast, { Toaster } from "react-hot-toast";
 import h2p from "html2plaintext";
@@ -18,14 +17,14 @@ import Spinner from "../../components/Spinner";
 import Colors from "../../components/Colors";
 import SizesList from "../../components/SizesList";
 import { setSuccess } from "../../store/reducers/globalReducer";
-import { Row , Col ,Form , Input } from "antd";
+import { v4 as uuidv4 } from "uuid";
+import { Row, Col, Form, Input } from "antd";
 
 const EditProduct = () => {
+  const [form] = Form.useForm();
   const { id } = useParams();
   const { data: product, isFetching: fetching } = useGetProductQuery(id);
-  console.log("data: ", product);
   const { data = [], isFetching } = useAllCategoriesQuery();
-  const [value, setValue] = useState("");
   const [state, setState] = useState({
     title: "",
     price: 0,
@@ -33,6 +32,8 @@ const EditProduct = () => {
     stock: 0,
     category: "",
     colors: [],
+    sizes: [],
+    description: "",
   });
   const [sizes] = useState([
     { name: "xsm" },
@@ -46,16 +47,16 @@ const EditProduct = () => {
     { name: "4 years" },
     { name: "5 years" },
   ]);
-  const [sizeList, setSizeList] = useState([]);
 
   const handleInput = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
+
   const saveColors = (color) => {
     const filtered = state.colors.filter((clr) => clr.color !== color.hex);
     setState({
       ...state,
-      colors: [...filtered, { color: color.hex, id: uuidv4() }],
+      colors: [...filtered, { color: color.hex }],
     });
   };
   const deleteColor = (color) => {
@@ -63,19 +64,42 @@ const EditProduct = () => {
     setState({ ...state, colors: filtered });
   };
   const chooseSize = (sizeObject) => {
-    const filtered = sizeList.filter((size) => size.name !== sizeObject.name);
-    setSizeList([...filtered, sizeObject]);
+    const filtered = state.sizes.filter(
+      (size) => size.name !== sizeObject.name
+    );
+    setState({
+      ...state,
+      sizes: [...filtered, { name: sizeObject.name }],
+    });
   };
   const deleteSize = (name) => {
-    const filtered = sizeList.filter((size) => size.name !== name);
-    setSizeList(filtered);
+    const filtered = state.sizes.filter((size) => size.name !== name);
+    setState({ ...state, sizes: filtered });
   };
+
   const [updateProduct, response] = useUpdateProductMutation();
-  console.log("Your response", response);
-  const createPro = (e) => {
-    e.preventDefault();
-    updateProduct(state);
+
+  //vi con phai truyen _id , slug ,createTime ,.... nen khong the truyen form truc tiep vao update
+  const editProduct = (e) => {
+    //editSize
+    form.setFieldValue("sizes", state.sizes);
+    //setTypeFormColor
+    form.setFieldValue(
+      "colors",
+      state.colors.map((data) => {
+        return {
+          id: uuidv4(),
+          color: data.color,
+        };
+      })
+    );
+
+    const inputEditProduct = form.getFieldsValue({ ...form });
+    //add data from FormModel to state
+    const dataUpdate = { ...state, ...inputEditProduct };
+    updateProduct(dataUpdate);
   };
+
   useEffect(() => {
     if (!response.isSuccess) {
       response?.error?.data?.errors.map((err) => {
@@ -91,17 +115,14 @@ const EditProduct = () => {
       navigate("/dashboard/products");
     }
   }, [response?.isSuccess]);
-  useEffect(() => {
-    setState({ ...state, description: value });
-  }, [value]);
+
   useEffect(() => {
     if (!fetching) {
       setState(product);
-      setSizeList(product.sizes);
-      setValue(h2p(product.description));
+      form.setFieldsValue({...product,description : h2p(product.description)});
     }
   }, [product]);
-  console.log("your state: ", state);
+
   return (
     <Wrapper>
       <ScreenHeader>
@@ -110,175 +131,173 @@ const EditProduct = () => {
         </Link>
       </ScreenHeader>
       <Toaster position="top-right" reverseOrder={true} />
-      
+
       {!fetching ? (
         <Row justify="space-around">
           <Col>
-          <Form
-            // form={form}
-            className="editProduct"
-            layout="vertical"
-            onFinish={(e) => {
-            }}
-          >
+            <h3 className="pb-3 capitalize text-lg font-medium text-gray-400">
+              Chỉnh sửa sản phẩm
+            </h3>
+            <Form
+              form={form}
+              className="editProduct"
+              layout="vertical"
+              onFinish={(e) => {
+                editProduct(e);
+              }}
+            >
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="title"
+                    label={<label className="label">Tên sản phẩm</label>}
+                    rules={[
+                      { required: true, message: "Please input your name!" },
+                    ]}
+                  >
+                    <Input
+                      className="form-control"
+                      id="title"
+                      placeholder="Tên sản phẩm..."
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="price"
+                    label={<label className="label">Giá</label>}
+                    rules={[
+                      { required: true, message: "Please input your name!" },
+                    ]}
+                  >
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="price"
+                      placeholder="Giá..."
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-            
-            
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Input
-                type="submit"
-                value={response.isLoading ? "loading..." : "Lưu sản phẩm"}
-                disabled={response.isLoading ? true : false}
-                className="btn btn-indigo"
-              />
-            </Form.Item>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="discount"
+                    label={<label className="label">Chiết khấu</label>}
+                    rules={[
+                      { required: true, message: "Please input your name!" },
+                    ]}
+                  >
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="discount"
+                      placeholder="Chiết khấu..."
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="stock"
+                    label={<label className="label">Số lượng</label>}
+                    rules={[
+                      { required: true, message: "Please input your name!" },
+                    ]}
+                  >
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="stock"
+                      placeholder="Số lượng..."
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
 
-          </Form>
-          </Col> 
-          <Col>
-          
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name="category"
+                    label={<label className="label">Danh mục</label>}
+                  >
+                    {!isFetching ? (
+                      data?.categories?.length > 0 && (
+                        <select
+                          name="category"
+                          id="categories"
+                          className="form-control"
+                          onChange={handleInput}
+                        >
+                          <option value="">Chọn danh mục</option>
+                          {data?.categories?.map((category) => (
+                            <option value={category.name} key={category._id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                      )
+                    ) : (
+                      <Spinner />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="colors"
+                    label={<label className="label">Chọn màu sắc</label>}
+                  >
+                    <TwitterPicker onChangeComplete={saveColors} />
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Form.Item
+                name="sizes"
+                label={<label className="label">Chọn kích cỡ</label>}
+              >
+                {sizes.length > 0 && (
+                  <div className="flex flex-wrap -mx-3">
+                    {sizes.map((size) => (
+                      <div
+                        key={size.name}
+                        className="size"
+                        onClick={() => chooseSize(size)}
+                      >
+                        {size.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Form.Item>
+
+              <Form.Item
+                name="description"
+                label={<label className="label">Mô tả</label>}
+              >
+                <ReactQuill
+                  name="description"
+                  theme="snow"
+                  id="description"
+                  placeholder="Thêm mô tả..."
+                />
+              </Form.Item>
+
+              <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Input
+                  type="submit"
+                  value={response.isLoading ? "loading..." : "Lưu sản phẩm"}
+                  disabled={response.isLoading ? true : false}
+                  className="btn btn-indigo"
+                />
+              </Form.Item>
+            </Form>
+          </Col>
+          <Col className="w-full xl:w-4/12 p-3">
+            <Colors colors={state.colors} deleteColor={deleteColor} />
+            <SizesList list={state.sizes} deleteSize={deleteSize} />
           </Col>
         </Row>
-        // <div className="flex flex-wrap -mx-3">
-        //   <form className="w-full xl:w-8/12 p-3" onSubmit={createPro}>
-        //     <h3 className="pl-3 capitalize text-lg font-medium text-gray-400">
-        //       Chỉnh sửa sản phẩm
-        //     </h3>
-        //     <div className="flex flex-wrap">
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="title" className="label">
-        //           Tên sản phẩm
-        //         </label>
-        //         <input
-        //           type="text"
-        //           name="title"
-        //           className="form-control"
-        //           id="title"
-        //           placeholder="title..."
-        //           onChange={handleInput}
-        //           value={state.title}
-        //         />
-        //       </div>
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="price" className="label">
-        //           giá
-        //         </label>
-        //         <input
-        //           type="number"
-        //           name="price"
-        //           className="form-control"
-        //           id="price"
-        //           placeholder="price..."
-        //           onChange={handleInput}
-        //           value={state.price}
-        //         />
-        //       </div>
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="discount" className="label">
-        //           chiết khấu
-        //         </label>
-        //         <input
-        //           type="number"
-        //           name="discount"
-        //           className="form-control"
-        //           id="discount"
-        //           placeholder="discount..."
-        //           onChange={handleInput}
-        //           value={state.discount}
-        //         />
-        //       </div>
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="stock" className="label">
-        //           số lượng
-        //         </label>
-        //         <input
-        //           type="number"
-        //           name="stock"
-        //           className="form-control"
-        //           id="stock"
-        //           placeholder="số lượng..."
-        //           onChange={handleInput}
-        //           value={state.stock}
-        //         />
-        //       </div>
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="categories" className="label">
-        //           danh mục
-        //         </label>
-        //         {!isFetching ? (
-        //           data?.categories?.length > 0 && (
-        //             <select
-        //               name="category"
-        //               id="categories"
-        //               className="form-control"
-        //               onChange={handleInput}
-        //               value={state.category}
-        //             >
-        //               <option value="">Chọn danh mục</option>
-        //               {data?.categories?.map((category) => (
-        //                 <option value={category.name} key={category._id}>
-        //                   {category.name}
-        //                 </option>
-        //               ))}
-        //             </select>
-        //           )
-        //         ) : (
-        //           <Spinner />
-        //         )}
-        //       </div>
-        //       <div className="w-full md:w-6/12 p-3">
-        //         <label htmlFor="colors" className="label">
-        //           chọn màu sắc
-        //         </label>
-        //         <TwitterPicker onChangeComplete={saveColors} />
-        //       </div>
-
-        //       <div className="w-full p-3">
-        //         <label htmlFor="sizes" className="label">
-        //           chọn kích cỡ
-        //         </label>
-        //         {sizes.length > 0 && (
-        //           <div className="flex flex-wrap -mx-3">
-        //             {sizes.map((size) => (
-        //               <div
-        //                 key={size.name}
-        //                 className="size"
-        //                 onClick={() => chooseSize(size)}
-        //               >
-        //                 {size.name}
-        //               </div>
-        //             ))}
-        //           </div>
-        //         )}
-        //       </div>
-
-        //       <div className="w-full p-3">
-        //         <label htmlFor="description" className="label">
-        //           Mô tả
-        //         </label>
-        //         <ReactQuill
-        //           theme="snow"
-        //           id="description"
-        //           value={value}
-        //           onChange={setValue}
-        //           placeholder="Thêm mô tả..."
-        //         />
-        //       </div>
-        //       <div className="w-full p-3">
-        //         <input
-        //           type="submit"
-        //           value={response.isLoading ? "loading..." : "Cập nhật"}
-        //           disabled={response.isLoading ? true : false}
-        //           className="btn btn-indigo"
-        //         />
-        //       </div>
-        //     </div>
-        //   </form>
-        //   <div className="w-full xl:w-4/12 p-3">
-        //     <Colors colors={state.colors} deleteColor={deleteColor} />
-        //     <SizesList list={sizeList} deleteSize={deleteSize} />
-        //   </div>
-        // </div>
       ) : (
         <Spinner />
       )}
