@@ -22,16 +22,11 @@ const CreateProduct = () => {
   const { data = [], isFetching } = useAllCategoriesQuery();
   const [value, setValue] = useState("");
   const [state, setState] = useState({
-    title: "",
-    price: 0,
-    discount: 0,
-    stock: 0,
-    category: "",
     colors: [],
+    sizes: [],
     image1: "",
     image2: "",
     image3: "",
-    sizes: [],
   });
   const [sizes] = useState([
     { name: "xsm" },
@@ -45,6 +40,7 @@ const CreateProduct = () => {
     { name: "4 years" },
     { name: "5 years" },
   ]);
+
   const [preview, setPreview] = useState({
     image1: "",
     image2: "",
@@ -52,8 +48,8 @@ const CreateProduct = () => {
   });
   const imageHandle = (e) => {
     if (e.target.files.length !== 0) {
-      setState({ ...state, [e.target.name]: e.target.files[0] });
       const reader = new FileReader();
+      setState({ ...state, [e.target.name]: e.target.files[0] });
       reader.onloadend = () => {
         setPreview({ ...preview, [e.target.name]: reader.result });
       };
@@ -67,7 +63,7 @@ const CreateProduct = () => {
     const filtered = state.colors.filter((clr) => clr.color !== color.hex);
     setState({
       ...state,
-      colors: [...filtered, { color: color.hex, id: uuidv4() }],
+      colors: [...filtered, { color: color.hex }],
     });
   };
   const deleteColor = (color) => {
@@ -85,15 +81,29 @@ const CreateProduct = () => {
   };
   const deleteSize = (name) => {
     const filtered = state.sizes.filter((size) => size.name !== name);
-    setState({
-      ...state,
-      sizes: filtered,
-    });
+    setState({ ...state, sizes: filtered });
   };
   const [createNewProduct, response] = useCProductMutation();
+
   const createProduct = (e) => {
     const formData = new FormData();
+    //setTypeFormColor
+    form.setFieldValue(
+      "colors",
+      state.colors.map((data) => {
+        return {
+          id: uuidv4(),
+          color: data.color,
+        };
+      })
+    );
+
+    //setTypeFormSize
+    form.setFieldValue("sizes", state.sizes);
+    console.log(form.getFieldsValue({...form}));
+
     const data = form.getFieldsValue({ ...form });
+
     formData.append("data", JSON.stringify(data));
     formData.append("description", value);
     formData.append("image1", state.image1);
@@ -216,7 +226,6 @@ const CreateProduct = () => {
                         id="categories"
                         className="form-control"
                         onChange={handleInput}
-                        value={state.category}
                       >
                         <option value="">Chọn danh mục</option>
                         {data?.categories?.map((category) => (
@@ -232,28 +241,19 @@ const CreateProduct = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                {/* <Form.Item
+                <Form.Item
                   name="colors"
                   label={<label className="label">Chọn màu sắc</label>}
-                  rules={[
-                    { required: true, message: "Please input your name!" },
-                  ]}
                 >
-                  <TwitterPicker onChangeComplete={colorPreview} />
-                </Form.Item> */}
-                <div className="w-full md:w-6/12 p-3">
-                  <label htmlFor="colors" className="label">
-                    Chọn màu sắc
-                  </label>
                   <TwitterPicker onChangeComplete={saveColors} />
-                </div>
+                </Form.Item>
               </Col>
             </Row>
 
-            <div className="w-full p-3">
-              <label htmlFor="sizes" className="label">
-                Chọn kích cỡ
-              </label>
+            <Form.Item
+              name="sizes"
+              label={<label className="label">Chọn kích cỡ</label>}
+            >
               {sizes.length > 0 && (
                 <div className="flex flex-wrap -mx-3">
                   {sizes.map((size) => (
@@ -267,46 +267,47 @@ const CreateProduct = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </Form.Item>
 
-            <div className="w-full p-3">
-              <label htmlFor="image1" className="label">
-                Ảnh 1
-              </label>
-              <input
-                type="file"
+            {/* vì khi xử lí onChange cần lấy ra được name input để setState */}
+            <Form.Item
+              name="image1"
+              label={<label className="label">Ảnh 1</label>}
+            >
+              <Input
                 name="image1"
+                type="file"
+                className="input-file"
                 id="image1"
-                className="input-file"
                 onChange={imageHandle}
               />
-            </div>
+            </Form.Item> 
 
-            <div className="w-full p-3">
-              <label htmlFor="image2" className="label">
-                Ảnh 2
-              </label>
-              <input
-                type="file"
+            <Form.Item
+              name="image2"
+              label={<label className="label">Ảnh 2</label>}
+            >
+              <Input
                 name="image2"
-                id="image2"
-                className="input-file"
-                onChange={imageHandle}
-              />
-            </div>
-
-            <div className="w-full p-3">
-              <label htmlFor="image3" className="label">
-                Ảnh 3
-              </label>
-              <input
                 type="file"
-                name="image3"
-                id="image3"
                 className="input-file"
+                id="image2"
                 onChange={imageHandle}
               />
-            </div>
+            </Form.Item>
+
+            <Form.Item
+              name="image3"
+              label={<label className="label">Ảnh 3</label>}
+            >
+              <Input
+                name="image3"
+                type="file"
+                className="input-file"
+                id="image3"
+                onChange={imageHandle}
+              />
+            </Form.Item>
 
             <div className="w-full p-3">
               <label htmlFor="description" className="label">

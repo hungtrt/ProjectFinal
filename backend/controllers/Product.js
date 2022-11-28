@@ -74,7 +74,7 @@ class Product {
                   stock: parseInt(parsedData.stock),
                   category: parsedData.category,
                   colors: parsedData.colors,
-                  sizes: JSON.parse(fields.sizes),
+                  sizes:  parsedData.sizes,
                   image1: images["image1"],
                   image2: images["image2"],
                   image3: images["image3"],
@@ -167,7 +167,6 @@ class Product {
       const product = await ProductModel.findOne({ _id: id });
       [1, 2, 3].forEach((number) => {
         let key = `image${number}`;
-        console.log(key);
         let image = product[key];
         let __dirname = path.resolve();
         let imagePath = __dirname + `/../client/public/images/${image}`;
