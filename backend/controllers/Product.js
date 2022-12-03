@@ -112,6 +112,14 @@ class Product {
       console.log(error.message);
     }
   }
+  async getAllProduct(req, res) {
+    try {
+      const product = await ProductModel.find({});
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
   async getProduct(req, res) {
     const { id } = req.params;
     try {

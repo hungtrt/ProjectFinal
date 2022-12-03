@@ -53,6 +53,15 @@ const productService = createApi({
                 },
                 providesTags: ['products']
             }),
+            getAllProduct: builder.query({
+                query: () => {
+                 return {
+                     url: `/products`,
+                     method: 'GET'
+                 }
+                },
+                providesTags: ['products']
+            }),
             getProduct: builder.query({
                 query: id => {
                 return {
@@ -65,5 +74,5 @@ const productService = createApi({
         }
     }
 })
-export const {useCProductMutation, useDeleteProductMutation , useUpdateProductMutation, useGetProductsQuery, useGetProductQuery} = productService;
+export const {useCProductMutation, useDeleteProductMutation , useUpdateProductMutation, useGetProductsQuery, useGetAllProductQuery, useGetProductQuery} = productService;
 export default productService
