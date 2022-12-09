@@ -13,7 +13,7 @@ class Orders {
       const response = await OrderModel.find(option)
         .populate(
           "productId",
-          "-colors -sizes -createdAt -updatedAt -stock -image2 -image3"
+          "-colors -sizes -createdAt -updatedAt -image2 -image3"
         )
         .populate("userId", "-password -updatedAt -createdAt -admin")
         .skip(skip)
@@ -31,7 +31,7 @@ class Orders {
       const details = await OrderModel.findOne({ _id: id })
         .populate(
           "productId",
-          "-colors -sizes -createdAt -updatedAt -stock -image2 -image3"
+          "-colors -sizes -createdAt -updatedAt -image2 -image3"
         )
         .populate("userId", "-password -updatedAt -createdAt -admin");
       return res.status(200).json({ details });
