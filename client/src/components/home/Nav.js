@@ -24,6 +24,7 @@ const Nav = () => {
               <Link to="/" className="nav-link ml-16">Sản phẩm</Link>
               <Link to="/news" className="nav-link ml-16">Khuyến mãi</Link>
               <Link to="/aboutUs" className="nav-link ml-16">Liên hệ</Link>
+              <Link to="/postForSale" className="nav-link ml-16">Đăng Bán</Link>
             </div>
             <ul className="flex items-center">
               <li className="nav-li cursor-pointer">

@@ -27,12 +27,14 @@ import Statistical from "../screens/dashboard/Statistical";
 import Landing from "../screens/home/Landing";
 import New from "../screens/home/New";
 import AboutUs from "../screens/home/AboutUs";
+import PostProduct from "../screens/home/postForSale";
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Landing />} />
         <Route path="/news" element={<New />} />
+        <Route path="/postForSale" element={<PostProduct/>} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/" element={<Home />} />
         <Route path="cat-products/:name" element={<CatProducts />} />
