@@ -116,13 +116,13 @@ const Statistical = () => {
               <table className="my-10 w-full bg-gray-900 rounded-md">
                 <thead>
                   <tr className="border-b border-gray-800 text-left">
-                    <th className="p-5 uppercase text-sm font-medium text-gray-500">
+                    <th className="p-3 uppercase text-sm font-medium text-gray-500">
                       Tên
                     </th>
-                    <th className="p-5 uppercase text-sm font-medium text-gray-500">
+                    <th className="p-3 uppercase text-sm font-medium text-gray-500">
                       số lượng
                     </th>
-                    <th className="p-5 uppercase text-sm font-medium text-gray-500">
+                    <th className="p-3 uppercase text-sm font-medium text-gray-500">
                       Chi tiết
                     </th>
                   </tr>
@@ -130,10 +130,10 @@ const Statistical = () => {
                 <tbody>
                   {data?.products?.map((product) => (
                     <tr className="odd:bg-gray-800" key={product._id}>
-                      <td className="p-5 capitalize text-sm font-normal text-gray-400">
+                      <td className="p-5 capitalize text-sm font-normal text-gray-200">
                         {product.title}
                       </td>
-                      <td className="p-5 capitalize text-sm font-normal text-gray-400">
+                      <td className="p-5 capitalize text-sm font-normal text-gray-200">
                         {product.stock}
                       </td>
                       <td className="p-5 capitalize text-sm font-normal text-gray-400">
@@ -156,7 +156,7 @@ const Statistical = () => {
               />
             </div>
             <div className="w-2/4">
-              <h3 className="pl-20 text-gray-300 text-lg">
+              <h3 className="pl-20 text-gray-200 text-lg">
                   Phân loại : 
               </h3>
               <DemoPie data={quantityCategory} />

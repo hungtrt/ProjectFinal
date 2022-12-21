@@ -23,18 +23,20 @@ import OrderDetails from "../screens/dashboard/OrderDetails";
 import UserOrders from "../screens/users/UserOrders";
 import UserOrderDetails from "../screens/users/UserOrderDetails";
 import Sales from "../screens/dashboard/Sales";
+import SalesPost from "../screens/users/Sales";
 import Statistical from "../screens/dashboard/Statistical";
 import Landing from "../screens/home/Landing";
 import New from "../screens/home/New";
 import AboutUs from "../screens/home/AboutUs";
-import PostProduct from "../screens/home/postForSale";
+import PostProduct from "../screens/users/PostForSale";
+import PostSales from "../screens/dashboard/PostSales";
+import PostSalesDetail from "../screens/dashboard/PostSalesDetail";
 const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={<Landing />} />
         <Route path="/news" element={<New />} />
-        <Route path="/postForSale" element={<PostProduct/>} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/" element={<Home />} />
         <Route path="cat-products/:name" element={<CatProducts />} />
@@ -48,6 +50,8 @@ const Routing = () => {
         </Route>
         <Route element={<UserRoute />}>
           <Route path="user" element={<Dashboard />} />
+          <Route path="postForSale" element={<PostProduct/>} />
+          <Route path="salesPost" element={<SalesPost/>} />
           <Route path="orders" element={<UserOrders />} />
           <Route path="orders/:page" element={<UserOrders />} />
           <Route path="user-order-details/:id" element={<UserOrderDetails />} />
@@ -57,6 +61,7 @@ const Routing = () => {
         </Route>
         <Route path="dashboard">
           <Route path="products" element={ <Private> <Products /> </Private>}/>
+          <Route path="productspost" element={ <Private> <PostSales /> </Private>}/>
           <Route path="products/:page" element={ <Private> <Products /> </Private>}/>
           <Route path="create-product" element={ <Private> <CreateProduct /> </Private>}/>
           <Route path="edit-product/:id" element={ <Private> <EditProduct /> </Private> }/>
@@ -72,6 +77,7 @@ const Routing = () => {
           <Route path="update-category/:id" element={ <Private> <UpdateCategory /> </Private>}/>
 
           <Route path="orders" element={<Orders />} />
+          <Route path="postSalesDetail/:id" element={<PostSalesDetail />} />
           <Route path="orders/:page" element={<Orders />} />
           <Route path="order-details/:id" element={<OrderDetails />} />
         </Route>

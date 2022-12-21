@@ -18,13 +18,13 @@ const Nav = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Link to="/">
-                <img src="/logo.png" className="h-[36px] object-cover" alt="logo" />
+                <img src="https://cdn.iconscout.com/icon/free/png-256/shopify-3627949-3029175.png" className="h-[40px] object-cover" alt="logo" />
               </Link>
               <Link to="/home" className="nav-link ml-8">Trang chủ</Link>
               <Link to="/" className="nav-link ml-16">Sản phẩm</Link>
               <Link to="/news" className="nav-link ml-16">Khuyến mãi</Link>
               <Link to="/aboutUs" className="nav-link ml-16">Liên hệ</Link>
-              <Link to="/postForSale" className="nav-link ml-16">Đăng Bán</Link>
+              <Link to="/postForSale" className="nav-link ml-14">Đăng Bán</Link>
             </div>
             <ul className="flex items-center">
               <li className="nav-li cursor-pointer">

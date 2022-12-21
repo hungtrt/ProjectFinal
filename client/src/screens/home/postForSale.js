@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { TwitterPicker } from "react-color";
 import { v4 as uuidv4 } from "uuid";
 import ReactQuill from "react-quill";
 import toast, { Toaster } from "react-hot-toast";
 import "react-quill/dist/quill.snow.css";
-import ScreenHeader from "../../components/ScreenHeader";
 import { useAllCategoriesQuery } from "../../store/services/categoryService";
 import { useCProductMutation } from "../../store/services/productService";
 import Spinner from "../../components/Spinner";
@@ -16,7 +15,6 @@ import ImagesPreview from "../../components/ImagesPreview";
 import { setSuccess } from "../../store/reducers/globalReducer";
 import { Row, Col, Form, Input } from "antd";
 import Nav from "../../components/home/Nav";
-import MainPanel from "../../components/home/News/MainPanel";
 
 const PostProduct = () => {
   const [form] = Form.useForm();
@@ -34,11 +32,6 @@ const PostProduct = () => {
     { name: "md" },
     { name: "lg" },
     { name: "xl" },
-    { name: "1 year" },
-    { name: "2 years" },
-    { name: "3 years" },
-    { name: "4 years" },
-    { name: "5 years" },
   ]);
   //luu image vao 2 state(preview va state) vi 1 ben can dang du lieu render , 1 ben luu vao database
   const [preview, setPreview] = useState({

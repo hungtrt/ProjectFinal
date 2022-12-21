@@ -11,7 +11,7 @@ const Orders = () => {
   console.log(data);
   return (
     <Wrapper>
-      <ScreenHeader><h3 className="text-xl font-bold">Đơn hàng</h3></ScreenHeader>
+      <ScreenHeader><h3 className="text-xl font-bold">Đơn Hàng</h3></ScreenHeader>
       {!isFetching ? (
         data?.orders?.length > 0 && (
           <>
